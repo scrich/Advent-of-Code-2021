@@ -1,1 +1,1 @@
-const input=``
+var input=[3,4,3,1,2];
