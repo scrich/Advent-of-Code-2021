@@ -1,70 +1,57 @@
-// go through all the edges and record them in nodes
 
-// first get a list of all the nodes.
-// Or do we need to?
+let unvisted = []
+let stack = []
 
-let nodes = new Map();
+let results = []
 
-// set up the nodes
-edges.forEach(element => {
-    let A = element[0];
-    let B = element[1];
+// https://www.programiz.com/dsa/graph-dfs
 
-    if (!nodes.has(A)) {
-        nodes.set(A, new Node(A))
-    } 
-    if (!nodes.has(B)) {
-        nodes.set(B, new Node(B))
-    } 
+// init
 
-    nodes.get(A).addEdge(B);
-    nodes.get(B).addEdge(A);
-
-});
-
-
-
-//
-// set visited
-
-nodes.forEach((value, key) => {value.visited = false});
-
-// now start
-let routes = [];
-routes.push( route_to_end('A'));
-console.log('routes',routes);
-
-function route_to_end(begin) {
-    let path = begin;
-    if (begin == 'end') {
-        console.log(`we are at the end`);
-        return path;
-    } else {
-        let to_visit = [];
-        nodes.get(begin).edges.forEach(edge => {
-            to_visit.push(edge);
-        });
-        console.log(`${begin} can visit ${to_visit}`);
-        to_visit.forEach(node => {
-            if (node != 'start') {
-                if (!nodes.get(node).visited) {
-                    console.log(`visiting ${node} from ${begin}`);
-                    nodes.get(node).visit();
-                    path = path + ',' + route_to_end(node);
-                }
-            }
-        });
-    }
-    return path;
-}
-
-// nodes.get('start').edges.forEach(edge => {
-//     console.log(`start, ${edge}`);
+// call DFS on all linked nodes from start
+// nodes.get('start').edges.forEach(element => {
+//     console.log(`initiating with ${element}`);
+//     result = DFS(['start'], element, ['start'])
+//     results.push(result);
 // });
 
-console.log('we have finished');
+DFS(results,'start',[])
+
+console.log(results);
+
+/**
+ * 
+ * @param {Array} paths
+ * @param {String} node 
+ * @param {Array} visited 
+ */
+function DFS(paths, node, visited) {
+    /**
+     * Mark the current node as visited and print the node.
+     * Traverse all the adjacent and unmarked nodes and 
+     * call the recursive function with the index of the adjacent node.
+     */
+    visited.push(node);
+    if (node == 'end') {
+        // console.log(`we are finishing at ${node} from ${visited}`);
+        paths.push(visited.join(','));
+        return;
+    }
+    
+    for (const neighbour of graph[node]) {
+        // console.log(`checking neighbour ${neighbour} against visited ${visited}`);
+        if (isSmallCave(neighbour) && visited.includes(neighbour)) {
+            // console.log(`don't visit neighbour ${neighbour}`);
+            continue;
+        }
+        DFS(paths, neighbour, [...visited])
+    }
+    
+}
+
+console.log('we have finished part 1');
 
 
-function split_segment(edge) {
-    return edge.split('-');
+function isSmallCave(cave) {
+    return cave.toLowerCase() == cave
 }

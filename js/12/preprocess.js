@@ -1,10 +1,17 @@
-let route_segments = input.split(/\n/);
-console.log(route_segments);
+let graph = {};
 
-let edges = [];
+input.split(/\n/).map(x => {
+    const [from, to] = x.split('-')
+    console.log(from, to);
+    if (!graph[from]) {
+        graph[from] = []
+    }
+    if (!graph[to]) {
+        graph[to] = []
+    }
+    graph[to].push(from);
+    graph[from].push(to);
+})
+// console.log(route_segments);
 
-route_segments.forEach(element => {
-    edges.push(element.split('-'))
-});
-
-console.log(edges);
+console.log(graph);

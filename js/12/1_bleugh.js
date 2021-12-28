@@ -73,3 +73,40 @@ function split_edges(edges, query) {
       return el.include
     })
   }
+//
+// set visited
+
+nodes.forEach((value, key) => {value.visited = false});
+
+// now start
+let routes = [];
+routes.push( route_to_end('A'));
+console.log('routes',routes);
+
+function route_to_end(begin) {
+    let path = begin;
+    if (begin == 'end') {
+        console.log(`we are at the end`);
+        return path;
+    } else {
+        let to_visit = [];
+        nodes.get(begin).edges.forEach(edge => {
+            to_visit.push(edge);
+        });
+        console.log(`${begin} can visit ${to_visit}`);
+        to_visit.forEach(node => {
+            if (node != 'start') {
+                if (!nodes.get(node).visited) {
+                    console.log(`visiting ${node} from ${begin}`);
+                    nodes.get(node).visit();
+                    path = path + ',' + route_to_end(node);
+                }
+            }
+        });
+    }
+    return path;
+}
+
+// nodes.get('start').edges.forEach(edge => {
+//     console.log(`start, ${edge}`);
+// });

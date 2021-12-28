@@ -1,0 +1,1 @@
+let instructions = input.split(/\n/);
